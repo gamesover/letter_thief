@@ -27,5 +27,7 @@ class CreateLetterThiefEmailMessages < ActiveRecord::Migration<%= migration_vers
 
       t.timestamps
     end
+
+    add_index :letter_thief_email_messages, :intercepted_at
   end
 end

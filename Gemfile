@@ -9,11 +9,8 @@ gem "sqlite3"
 gem "pg"
 gem "mysql2"
 
-gem "propshaft"
-
-# Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
 gem "standard"
 
-# Start debugger with binding.b [https://github.com/ruby/debug]
-# gem "debug", ">= 1.0.0"
 gem "launchy"
+
+gem "faker"

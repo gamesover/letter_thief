@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 module LetterThief
   class EmailMessagesController < ApplicationController
-    layout "letter_thief/application"
+    layout 'letter_thief/application'
+
+    PAGE_SIZE = 20
 
     def index
-      @emails = EmailMessage.order(intercepted_at: :desc).limit(50)
+      @search = LetterThief::EmailSearch.new(params).perform
     end
 
     def show

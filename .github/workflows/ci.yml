@@ -39,7 +39,22 @@ jobs:
 
       - name: Check linters
         run: bundle exec standardrb
-      - name: Run tests
+
+      - name: Run postgres tests
         env:
           RAILS_ENV: test
+          TARGET_DB: postgres
         run: bin/rails test
+
+      - name: Run mysql tests
+        env:
+          RAILS_ENV: test
+          TARGET_DB: mysql
+        run: bin/rails test
+
+      - name: Run sqlite tests
+        env:
+          RAILS_ENV: test
+          TARGET_DB: sqlite
+        run: bin/rails test
+

@@ -1,26 +1,92 @@
 <h1>📬 Intercepted Emails</h1>
 
-<table role="grid">
-  <thead>
-  <tr>
-    <th>From</th>
-    <th>To</th>
-    <th>Subject</th>
-    <th>Time</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @emails.each do |email| %>
+<form method="get" style="margin-bottom: 1rem;">
+  <fieldset class="grid">
+    <label>
+      Query
+      <input
+        name="query"
+        value="<%= h(@search.query) %>"
+        placeholder="Search by from, to, or subject"/>
+    </label>
+
+    <label>
+      From Time
+      <input
+        type="datetime-local"
+        name="start_time"
+        value="<%= @search.start_time %>"/>
+    </label>
+
+    <label>
+      To Time
+      <input
+        type="datetime-local"
+        name="end_time"
+        value="<%= @search.end_time %>"/>
+    </label>
+
+    <input type="submit" value="Search" style="margin-top: 1.7rem"/>
+
+  </fieldset>
+</form>
+
+
+<% if @search.total_count > 0 %>
+  <p><%= pluralize(@search.total_count, "email") %> found</p>
+
+  <table role="grid">
+    <thead>
     <tr>
-      <td><%= email.from&.join(", ") %></td>
-      <td><%= email.to&.join(", ") %></td>
-      <td>
-        <a href="<%= letter_thief.email_message_path(email) %>">
-          <%= email.subject.presence || "(no subject)" %>
-        </a>
-      </td>
-      <td><%= email.intercepted_at.strftime("%Y-%m-%d %H:%M") %></td>
+      <th>From</th>
+      <th>To</th>
+      <th>Subject</th>
+      <th>Time</th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+    <% @search.results.each do |email| %>
+      <tr>
+        <td><%= email.from&.join(", ") %></td>
+        <td><%= email.to&.join(", ") %></td>
+        <td>
+          <a href="<%= letter_thief.email_message_path(email) %>">
+            <%= email.subject.presence || "(no subject)" %>
+          </a>
+        </td>
+        <td><%= email.intercepted_at.strftime("%Y-%m-%d %H:%M") %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <nav aria-label="Pagination">
+    <ul style="display: flex; gap: 1rem; list-style: none; padding-left: 0;">
+      <% if @search.page > 1 %>
+        <li>
+          <%= link_to "← Previous", letter_thief.email_messages_path(
+            query: @search.query,
+            start_time: @search.start_time,
+            end_time: @search.end_time,
+            page: @search.page - 1
+          ) %>
+        </li>
+      <% end %>
+
+      <li>Page <%= @search.page %></li>
+
+      <% if @search.has_next_page %>
+        <li>
+          <%= link_to "Next →", letter_thief.email_messages_path(
+            query: @search.query,
+            start_time: @search.start_time,
+            end_time: @search.end_time,
+            page: @search.page + 1
+          ) %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+<% else %>
+  <p>No emails found.</p>
+<% end %>

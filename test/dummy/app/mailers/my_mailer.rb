@@ -1,13 +1,13 @@
 class MyMailer < ApplicationMailer
   def text_mail
-    mail(to: "rodi@hey.com", subject: "Text mail")
+    mail(from: Faker::Internet.email, to: Faker::Internet.email, subject: Faker::Lorem.sentence)
   end
 
   def html_mail
-    mail(to: "rodi@hey.com", subject: "HTML mail")
+    mail(from: Faker::Internet.email, to: Faker::Internet.email, subject: Faker::Lorem.sentence)
   end
 
   def multipart_mail
-    mail(to: "rodi@hey.com", subject: "Multipart mail")
+    mail(from: Faker::Internet.email, to: Faker::Internet.email, subject: Faker::Lorem.sentence)
   end
 end
