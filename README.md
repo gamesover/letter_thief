@@ -2,13 +2,14 @@
 
 <img alt="logo.webp" src="logo.png" width="150px"/>
 
-**A Rails engine to log email deliveries.**
+**A Rails engine to log email deliveries, visualize them in the Browser and, if you want, intercept them.**
 
 This gem allows you to log on the database the emails sent by your application.
 
-But that's not all! It provides also an interface to visualize them directly in the Browser.
+It provides an interface to visualize the emails directly in the Browser, and search them.
 
-You can of course navigate and search your emails using ActiveRecord `LetterThief::EmailMessage` model.
+You can of course navigate and search your emails using ActiveRecord `LetterThief::EmailMessage` model and integrate it
+other parts of your app.
 
 > List of interecepted email
 ![screenshot1.png](screenshot1.png)
@@ -16,7 +17,7 @@ You can of course navigate and search your emails using ActiveRecord `LetterThie
 > Email preview
 ![screenshot2.png](screenshot2.png)
 
-And that's not all! You can use letter thief as a delivery method in your application as well.
+You can also use `Letter Thief` as a delivery method in your application as well.
 
 Set `config.action_mailer.delivery_method = :letter_thief` to stop sending emails and have them only logged in your
 database. That's particularly useful in development environments or staging/pre-production environments as well.
@@ -24,7 +25,10 @@ database. That's particularly useful in development environments or staging/pre-
 If you used `letter_opener` in the past you know how nice it is to have
 the sent emails opened automatically in your Browser when working locally.
 LetterThief supports this as well with the very same mechanism, but `launchy` is not a direct dependency.
-This means that you'll have to add it yourself to the Gemfile.
+If you add Launchy on your Gemfile, emails will be opened right away once sent.
+
+Since emails are persisted on the Database it means you can use this also on Heroku, deplo.io, or other PaaS where you
+don't have a disk. No need for an external service like Mailtrap (amazing service!) anymore.
 
 ## Installation
 
@@ -82,13 +86,18 @@ development:
 ## Varia
 
 > [!NOTE]
-> Persisting the emails on the database might have privacy related concerns. You might want to encrypt stuff.  
+> Persisting the emails on the database might have privacy related concerns. You might want to encrypt stuff.
 
 > [!NOTE]
 > You might want to schedule a cleanup job to remove old records from time to time.
 
 > [!NOTE]
 > For this gem I was heavily inspired by letter_opener, which I used for over ten years. ❤️
+
+> [!NOTE]
+> I planned to basically just replicate letter_opener but persist emails in the database, so I could use it on Heroku or
+> deplo.io, that's why is called LetterThief. It was supposed to just intercept and block emails from being sent. It
+> ended up being this and also a logging system.
 
 ## Development
 
