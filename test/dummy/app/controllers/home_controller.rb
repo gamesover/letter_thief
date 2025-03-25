@@ -13,4 +13,9 @@ class HomeController < ApplicationController
     MyMailer.multipart_mail.deliver_now
     redirect_to root_path
   end
+
+  def send_attachments_mail
+    MyMailer.attachments_mail.deliver_now
+    redirect_to root_path
+  end
 end

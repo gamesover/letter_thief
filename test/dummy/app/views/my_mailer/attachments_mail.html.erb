@@ -1,0 +1,9 @@
+<h1>Hello!</h1>
+<p>This image is loaded via asset helper</p>
+<%= image_tag('fox.png', width: 200) %>
+<p>This image is loaded via asset helper but with URL</p>
+<img src="<%= asset_url('fox.png', host: 'http://localhost:3000') %>" alt="Fox" width="200"/>
+<p>This email includes a plain attachment and an inline image below.</p>
+<%= image_tag attachments['fox.png'].url, width: 200 %>
+
+And here I have a link to https://kagi.com

@@ -2,7 +2,7 @@
 
 module LetterThief
   class EmailMessagesController < ApplicationController
-    layout 'letter_thief/application'
+    layout "letter_thief/application"
 
     PAGE_SIZE = 20
 

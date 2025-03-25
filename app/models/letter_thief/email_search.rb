@@ -17,19 +17,19 @@ module LetterThief
 
       if query.present?
         adapter = ActiveRecord::Base.connection.adapter_name.downcase
-        scope = if adapter.include?('postgresql')
-                  scope.where(<<~SQL.squish, q: "%#{query}%")
-                    subject ILIKE :q
-                    OR array_to_string("from", ',') ILIKE :q
-                    OR array_to_string("to", ',') ILIKE :q
-                  SQL
-                else
-                  scope.where('subject LIKE :q OR "from" LIKE :q OR "to" LIKE :q', q: "%#{query}%")
-                end
+        scope = if adapter.include?("postgresql")
+          scope.where(<<~SQL.squish, q: "%#{query}%")
+            subject ILIKE :q
+            OR array_to_string("from", ',') ILIKE :q
+            OR array_to_string("to", ',') ILIKE :q
+          SQL
+        else
+          scope.where('subject LIKE :q OR "from" LIKE :q OR "to" LIKE :q', q: "%#{query}%")
+        end
       end
 
-      scope = scope.where('intercepted_at >= ?', parse_datetime(start_time)) if start_time.present?
-      scope = scope.where('intercepted_at <= ?', parse_datetime(end_time)) if end_time.present?
+      scope = scope.where("intercepted_at >= ?", parse_datetime(start_time)) if start_time.present?
+      scope = scope.where("intercepted_at <= ?", parse_datetime(end_time)) if end_time.present?
 
       @total_count = scope.count
       @results = scope.limit(PAGE_SIZE).offset((page - 1) * PAGE_SIZE)

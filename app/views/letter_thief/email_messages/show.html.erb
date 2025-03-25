@@ -31,6 +31,15 @@
       <dt>BCC:</dt>
       <dd><%= @email.bcc.join(", ") %></dd>
     <% end %>
+
+    <% if @email.attachments.any? %>
+      <dt>Attachments:</dt>
+      <dd>
+        <% @email.attachments.each do |file| %>
+          <%= link_to file.filename, main_app.rails_blob_path(file, disposition: "attachment") %>
+        <% end %>
+      </dd>
+    <% end %>
   </dl>
 </section>
 
@@ -46,7 +55,7 @@
   </nav>
 <% end %>
 
-<section id="email_body">
+<section id="email_body" style="height:100%">
   <% if @email.body_text.present? %>
     <% if @email.rich? %>
       <iframe
@@ -63,7 +72,7 @@
     <iframe
       id="html-version"
       class="email-version"
-      srcdoc="<base target='_top'><%= h(@email.body_html) %>">
+      srcdoc="<base target='_top'><%= parsed_body_html(@email) %>">
     </iframe>
   <% end %>
 </section>

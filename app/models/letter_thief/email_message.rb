@@ -2,6 +2,8 @@ module LetterThief
   class EmailMessage < ApplicationRecord
     self.table_name = "letter_thief_email_messages"
 
+    has_many_attached :attachments
+
     unless ActiveRecord::Base.connection.adapter_name.downcase.include?("postgresql")
       serialize :to, coder: JSON, type: Array
       serialize :from, coder: JSON, type: Array
