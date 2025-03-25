@@ -1,4 +1,4 @@
-<% def database_name_from(name); ENV.fetch("TARGET_DB", nil).nil? ? "storage/#{name}.sqlite3" : name; end %>
+<% def database_name_from(name); (ENV.fetch("TARGET_DB", "sqlite") == "sqlite") ? "storage/#{name}.sqlite3" : name; end %>
 
 <% if ENV["TARGET_DB"] == "mysql" %>
 default: &default
@@ -16,7 +16,7 @@ default: &default
   pool: 5
 #  host: localhost
 
-<% else %>
+<% elsif ENV["TARGET_DB"] == "sqlite" %>
 default: &default
   adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 50 } %>

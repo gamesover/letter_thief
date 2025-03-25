@@ -19,9 +19,9 @@ jobs:
           bundler-cache: true
 
       - name: Lint code for consistent style
-        run: standardrb
+        run: bundle exec standardrb
 
-  test:
+  sqlite_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,20 +37,11 @@ jobs:
           ruby-version: 3.4.1
           bundler-cache: true
 
-      - name: Check linters
-        run: bundle exec standardrb
-
-      - name: Run postgres tests
+      - name: Setup database
         env:
           RAILS_ENV: test
-          TARGET_DB: postgres
-        run: bin/rails test
-
-      - name: Run mysql tests
-        env:
-          RAILS_ENV: test
-          TARGET_DB: mysql
-        run: bin/rails test
+          TARGET_DB: sqlite
+        run: bin/rails db:drop db:create db:migrate
 
       - name: Run sqlite tests
         env:
@@ -58,3 +49,86 @@ jobs:
           TARGET_DB: sqlite
         run: bin/rails test
 
+  mysql_tests:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -u root --password=password"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config google-chrome-stable
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.1
+          bundler-cache: true
+
+      - name: Setup database
+        env:
+          RAILS_ENV: test
+          TARGET_DB: mysql
+        run: bin/rails db:drop db:create db:migrate
+
+      - name: Run mysql tests
+        env:
+          RAILS_ENV: test
+          TARGET_DB: mysql
+          DATABASE_URL: mysql2://root:password@127.0.0.1:3306/test_db
+        run: bin/rails test
+
+  postgres_tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config google-chrome-stable
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.1
+          bundler-cache: true
+
+      - name: Setup database
+        env:
+          RAILS_ENV: test
+          TARGET_DB: postgres
+        run: bin/rails db:drop db:create db:migrate
+
+      - name: Run postgres tests
+        env:
+          RAILS_ENV: test
+          TARGET_DB: postgres
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
+        run: bin/rails test

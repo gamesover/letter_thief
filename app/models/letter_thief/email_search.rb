@@ -23,6 +23,8 @@ module LetterThief
             OR array_to_string("from", ',') ILIKE :q
             OR array_to_string("to", ',') ILIKE :q
           SQL
+        elsif adapter.include?("mysql")
+          scope.where("`subject` LIKE :q OR `from` LIKE :q OR `to` LIKE :q", q: "%#{query}%")
         else
           scope.where('subject LIKE :q OR "from" LIKE :q OR "to" LIKE :q', q: "%#{query}%")
         end
