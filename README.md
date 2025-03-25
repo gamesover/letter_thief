@@ -48,6 +48,15 @@ bin/rails db:migrate
 
 This will create the necessary tables.
 
+Mount the engine in your routes, protecting it. 
+The code below might be different depending on how you authenticate your users.
+
+```ruby
+authenticate :user, ->(user) { sys_manager&.administrator? } do
+  mount LetterThief::Engine => "/letter_thief"
+end
+```
+
 If you want to stop sending emails, you can use it also as delivery method:
 
 ```ruby
