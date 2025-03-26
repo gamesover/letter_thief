@@ -48,7 +48,7 @@ bin/rails db:migrate
 
 This will create the necessary tables.
 
-Mount the engine in your routes, protecting it. 
+Mount the engine in your routes, protecting it.
 The code below might be different depending on how you authenticate your users.
 
 ```ruby
@@ -129,3 +129,7 @@ Try to be a decent human being while interacting with other people.
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
+## Credits
+
+* [letter_opener](https://github.com/ryanb/letter_opener) is simpler and does not persist emails. This might be indeed
+  be better for your use case. It's also the gem that inspired me to create this one.
