@@ -1,3 +1,5 @@
+<% content_for :title, "Letter Thief" %>
+
 <h1>📬 Intercepted Emails</h1>
 
 <form method="get" style="margin-bottom: 1rem;">
@@ -50,7 +52,7 @@
         <td><%= email.from&.join(", ") %></td>
         <td><%= email.to&.join(", ") %></td>
         <td>
-          <a href="<%= letter_thief.email_message_path(email) %>">
+          <a href="<%= email_message_path(email) %>">
             <%= email.subject.presence || "(no subject)" %>
           </a>
         </td>
@@ -64,7 +66,7 @@
     <ul style="display: flex; gap: 1rem; list-style: none; padding-left: 0;">
       <% if @search.page > 1 %>
         <li>
-          <%= link_to "← Previous", letter_thief.email_messages_path(
+          <%= link_to "← Previous", email_messages_path(
             query: @search.query,
             start_time: @search.start_time,
             end_time: @search.end_time,
@@ -77,7 +79,7 @@
 
       <% if @search.has_next_page %>
         <li>
-          <%= link_to "Next →", letter_thief.email_messages_path(
+          <%= link_to "Next →", email_messages_path(
             query: @search.query,
             start_time: @search.start_time,
             end_time: @search.end_time,

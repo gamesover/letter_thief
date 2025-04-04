@@ -1,4 +1,6 @@
-<p><a href="<%= letter_thief.email_messages_path %>">&larr; Back to Inbox 📬</a></p>
+<% content_for :title, "Message ##{@email.id}" %>
+
+<p><a href="<%= email_messages_path %>">&larr; Back to Inbox 📬</a></p>
 
 <section id="message_headers">
   <dl>
