@@ -4,6 +4,10 @@ module LetterThief
   class EmailMessagesController < ApplicationController
     layout "letter_thief/application"
 
+    content_security_policy do |policy|
+      policy.style_src :self, :https, :unsafe_inline
+    end
+
     PAGE_SIZE = 20
 
     def index

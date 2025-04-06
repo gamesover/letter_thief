@@ -9,6 +9,7 @@
 * Breaking change: dropped raw_message in favour of a separate attachment. Remove the column if you are migrating from a
   previous version with `remove_column :letter_thief_email_messages, :raw_message`.
 * Show space used by each logged email and total space used.
+* Relax CSP rules for the LetterThief pages to allow inline CSS styles.
 
 # 0.1.1
 
