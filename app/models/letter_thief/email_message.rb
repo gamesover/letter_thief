@@ -2,6 +2,8 @@ module LetterThief
   class EmailMessage < ApplicationRecord
     self.table_name = "letter_thief_email_messages"
 
+    connects_to(**LetterThief.connects_to) if LetterThief.connects_to
+
     has_many_attached :attachments
     has_one_attached :raw_email
 
