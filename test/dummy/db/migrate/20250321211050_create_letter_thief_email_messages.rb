@@ -21,7 +21,6 @@ class CreateLetterThiefEmailMessages < ActiveRecord::Migration[7.2]
       t.text :body_text
       t.text :body_html
       t.text :headers
-      t.text :raw_message
       t.string :content_type
       t.datetime :intercepted_at
 

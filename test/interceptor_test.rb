@@ -20,7 +20,6 @@ module LetterThief
       assert_equal "Hello", email.subject
       assert_equal "This is a plain text message", email.body_text
       assert_equal nil, email.body_html
-      assert_equal mail.to_s, email.raw_message
       assert_equal mail.content_type, email.content_type
       refute mail.multipart?
       assert email.intercepted_at.present?
@@ -48,6 +47,22 @@ module LetterThief
       assert_equal "Plain version", email.body_text
       assert_equal "<h1>HTML version</h1>", email.body_html
       assert mail.multipart?
+    end
+
+    test "captures also the raw email as attachment" do
+      mail = Mail.new do
+        from "sender@example.com"
+        to "receiver@example.com"
+        subject "Hello"
+        body "This is a plain text message"
+        add_file(filename: "test.txt", content: "This is a test file")
+      end
+
+      Interceptor.delivering_email(mail)
+
+      email = EmailMessage.last
+      assert_equal email.attachments.length, 1
+      assert email.raw_email.present?
     end
   end
 end

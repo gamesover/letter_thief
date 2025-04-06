@@ -1,6 +1,7 @@
 module LetterThief
   class Interceptor
     def self.delivering_email(mail)
+      string_io = StringIO.new(mail.to_s)
       email = EmailMessage.create!(
         to: mail.to,
         from: mail.from,
@@ -11,7 +12,6 @@ module LetterThief
         body_text: mail.text_part&.decoded || mail.body.decoded,
         body_html: mail.html_part&.decoded,
         headers: mail.header.to_s,
-        raw_message: mail.to_s,
         content_type: mail.content_type,
         intercepted_at: Time.current
       )
@@ -25,6 +25,12 @@ module LetterThief
         ar_attachment.blob.metadata["cid"] = attachment.cid
         ar_attachment.blob.save!
       end
+
+      email.raw_email.attach(
+        io: string_io,
+        filename: "message-#{email.id}.eml",
+        content_type: "message/rfc822"
+      )
     rescue => e
       Rails.logger.error("[LetterThief] Failed to store intercepted email: #{e.message}")
     end

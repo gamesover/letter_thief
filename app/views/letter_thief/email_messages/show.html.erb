@@ -1,6 +1,6 @@
 <% content_for :title, "Message ##{@email.id}" %>
 
-<p><a href="<%= email_messages_path %>">&larr; Back to Inbox 📬</a></p>
+<p><a href="<%= email_messages_path %>">&larr; Back to Outbox 📬</a></p>
 
 <section id="message_headers">
   <dl>
@@ -43,6 +43,9 @@
       </dd>
     <% end %>
   </dl>
+  <% if @email.raw_email.attached? %>
+    <%= link_to "Download", main_app.rails_blob_path(@email.raw_email, disposition: "attachment") %>
+  <% end %>
 </section>
 
 <hr>
