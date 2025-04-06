@@ -1,7 +1,9 @@
 <% content_for :title, "Letter Thief" %>
 
-<h1>📬 Intercepted Emails</h1>
-
+<h1>📬 Intercepted Emails (Outbox)</h1>
+<p>
+  Currently occupying <%= number_to_human_size(LetterThief.used_activestorage_space)%>
+</p>
 <form method="get" style="margin-bottom: 1rem;">
   <fieldset class="grid">
     <label>
@@ -44,6 +46,7 @@
       <th>To</th>
       <th>Subject</th>
       <th>Time</th>
+      <th>Size</th>
     </tr>
     </thead>
     <tbody>
@@ -57,6 +60,7 @@
           </a>
         </td>
         <td><%= email.intercepted_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= number_to_human_size(email.raw_email.byte_size) %></td>
       </tr>
     <% end %>
     </tbody>
