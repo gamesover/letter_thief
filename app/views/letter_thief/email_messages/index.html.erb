@@ -47,6 +47,7 @@
       <th>Subject</th>
       <th>Time</th>
       <th>Size</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
@@ -61,6 +62,7 @@
         </td>
         <td><%= email.intercepted_at.strftime("%Y-%m-%d %H:%M") %></td>
         <td><%= number_to_human_size(email.raw_email.byte_size) %></td>
+        <td><%= button_to 'Delete', email_message_path(email), method: :delete, class: 'outline contrast' %></td>
       </tr>
     <% end %>
     </tbody>
