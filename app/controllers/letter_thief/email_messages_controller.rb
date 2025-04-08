@@ -15,7 +15,8 @@ module LetterThief
       @search = LetterThief::EmailSearch.new(params).perform
     end
 
-    def show; end
+    def show
+    end
 
     def destroy
       redirect_to email_messages_path if @email.destroy
